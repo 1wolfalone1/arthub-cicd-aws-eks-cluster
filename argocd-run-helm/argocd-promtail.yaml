@@ -9,11 +9,10 @@ spec:
     chart: 'promtail'
     repoURL: 'https://grafana.github.io/helm-charts'
     targetRevision: 6.15.5 
-    plugin:
-      # name: argocd-vault-plugini
-      env:
-      - name: HELM_ARGS
-        value: -f https://github.com/1wolfalone1/arthub-cicd-aws-eks-cluster/raw/main/helm-values/promtail.yaml   
+    helm:
+      releaseName: promtail
+      valueFiles:
+      - https://github.com/1wolfalone1/arthub-cicd-aws-eks-cluster/raw/main/helm-values/promtail.yamll    
   destination:
     server: "https://kubernetes.default.svc"
     namespace: logging
