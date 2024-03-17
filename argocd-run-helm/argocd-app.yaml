@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-vault-plugin
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: test
+    repoURL: https://github.com/1wolfalone1/arthub-cicd-aws-eks-cluster 
+    targetRevision: HEAD
+    plugin:
+      name: argocd-vault-plugin
+
+# need to add sync policy and check this file

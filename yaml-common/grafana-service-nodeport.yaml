@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  # annotations:
+  #   alb.ingress.kubernetes.io/backend-protocol-version: HTTP2
+  labels:
+    app: grafana
+  name: grafana-nodeport
+  namespace: monitoring
+spec:
+  ports:
+  - name: service
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app.kubernetes.io/instance: vm-k8s
+    app.kubernetes.io/name: grafana
+  sessionAffinity: None
+  type: NodePort

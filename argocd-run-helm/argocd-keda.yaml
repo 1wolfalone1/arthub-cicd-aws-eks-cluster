@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: keda
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: keda  
+    path: keda  
+    repoURL: 'https://kedacore.github.io/charts' 
+    targetRevision: '2.12'
+    helm:
+      releaseName: keda
+      # valueFiles:
+      # - $values/infra-deployments/external-dns/cf-myorg--com/bitnami-6.36.1-helm-values.yaml     
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: keda
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+      - CreateNamespace=true
+
+
+# kubectl delete $(kubectl get scaledobjects.keda.sh,scaledjobs.keda.sh -A \
+#   -o jsonpath='{"-n "}{.items[*].metadata.namespace}{" "}{.items[*].kind}{"/"}{.items[*].metadata.name}{"\n"}')
+# helm uninstall keda -n keda
+# for i in $(kubectl get scaledobjects -A \
+#   -o jsonpath='{"-n "}{.items[*].metadata.namespace}{" "}{.items[*].kind}{"/"}{.items[*].metadata.name}{"\n"}');
+# do kubectl patch $i -p '{"metadata":{"finalizers":null}}' --type=merge
+# done
+#
+# for i in $(kubectl get scaledjobs -A \
+#   -o jsonpath='{"-n "}{.items[*].metadata.namespace}{" "}{.items[*].kind}{"/"}{.items[*].metadata.name}{"\n"}');
+# do kubectl patch $i -p '{"metadata":{"finalizers":null}}' --type=merge
+# done

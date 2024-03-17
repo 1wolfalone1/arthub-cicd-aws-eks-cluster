@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    # alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":{
+    #   "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    # alb.ingress.kubernetes.io/backend-protocol-version: GRPC
+    # alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:198729665721:certificate/2c7e0d62-24fc-4862-8c1d-4c1eee15acaa
+    # alb.ingress.kubernetes.io/conditions.argogrpc: | 
+    #     [{"field":"http-header","httpHeaderConfig":{"httpHeaderName": "Content-Type", "values":["application/grpc"]}}]
+  name: argocd-ingres-4
+  namespace: argocd
+    # Health Check Settings
+    # alb.ingress.kubernetes.io/healthcheck-protocol: HTTP 
+    # alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    # alb.ingress.kubernetes.io/healthcheck-path: /usermgmt/health-status
+    # alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
+    # alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
+    # alb.ingress.kubernetes.io/success-codes: '200'
+    # alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+    # alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'
+spec:
+  ingressClassName: alb
+  rules:
+    - host: "argocd.1wolfalone1.com"
+      http:
+        paths:
+          - backend:
+              service:
+                name: argogrpc
+                port:
+                  number: 443
+            path: /
+            pathType: Prefix
+
+

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-app-deployment
+  namespace: user-app
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: user-app
+  template:
+    metadata:
+      labels:
+        app: user-app
+    spec:
+      containers:
+      - name: user-app-container
+        image: 1wolfalone1/swd-user:latest
+        ports:
+        - containerPort: 80
+        envFrom:
+        - secretRef:
+            name: arthub-secrets

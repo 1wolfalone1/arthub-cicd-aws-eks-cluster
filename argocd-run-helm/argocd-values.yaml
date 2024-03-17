@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: values
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/1wolfalone1/arthub-cicd-aws-eks-cluster' 
+    targetRevision: HEAD
+    ref: values
+      # - $values/infra-deployments/external-dns/cf-myorg--com/bitnami-6.36.1-helm-values.yaml
+  destination:
+    server: "https://kubernetes.default.svc"
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

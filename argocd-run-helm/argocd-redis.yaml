@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-cluster
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: redis-cluster
+    path: redis-cluster
+    repoURL: 'registry-1.docker.io/bitnamicharts' 
+    targetRevision: 9.8.1
+    plugin:
+      # name: argocd-vault-plugin
+      env:
+      - name: HELM_VALUES
+        value: |
+          password: <path:kv/data/test#password>
+      - name: helm_args
+        value: -f https://github.com/1wolfalone1/arthub-cicd-aws-eks-cluster/raw/main/helm-values/redis.yaml 
+      # - name: HELM_VALUES
+      #   value: |
+      #     password: <path:kv/data/test#password>
+    # helm:
+    #   releaseName: redis-cluster
+    #   valueFiles:
+    #   - https://github.com/1wolfalone1/arthub-cicd-aws-eks-cluster/raw/main/helm-values/redis.yaml 
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: redis-cluster
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    automated: 
+      prune: true
+      allowEmpty: true
+      selfHeal: true 

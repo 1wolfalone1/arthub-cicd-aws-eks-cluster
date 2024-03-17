@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: example-secret-3
+  annotations:
+    avp.kubernetes.io/path: "/kv/data/test" #path of secret in vault
+type: Opaque
+stringData:
+  TOKEN: <password> #Fomat should be like this with keye

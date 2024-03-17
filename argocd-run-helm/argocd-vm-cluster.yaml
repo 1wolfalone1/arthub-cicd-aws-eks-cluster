@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vm-cluster
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: victoria-metrics-k8s-stack 
+    path: victoria-metrics-k8s-stack 
+    repoURL: 'https://victoriametrics.github.io/helm-charts/' 
+    targetRevision: 0.17.5 
+    helm:
+      releaseName: vm-k8s
+      valueFiles:
+      - https://raw.githubusercontent.com/1wolfalone1/arthub-cicd-aws-eks-cluster/main/helm-values/vm-cluster.yaml     
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: monitoring 
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    automated: 
+      prune: true
+      allowEmpty: true
+      selfHeal: true 

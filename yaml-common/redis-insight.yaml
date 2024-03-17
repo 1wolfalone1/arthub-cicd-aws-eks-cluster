@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redisinsight
+  namespace: redis-cluster
+  labels:
+    app: redisinsight
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redisinsight
+  template:
+    metadata:
+      labels:
+        app: redisinsight
+    spec:
+      containers:
+
+      - name:  redisinsight
+        image: redislabs/redisinsight:1.13.1
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: db 
+          mountPath: /db
+        ports:
+        - containerPort: 8001
+          protocol: TCP
+      volumes:
+      - name: db
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redisinsight-service
+  namespace: redis-cluster
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8001
+  selector:
+    app: redisinsight

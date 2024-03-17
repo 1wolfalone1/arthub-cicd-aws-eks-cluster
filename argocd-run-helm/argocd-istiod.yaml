@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istiod
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: istiod
+    path: istiod
+    repoURL: 'https://istio-release.storage.googleapis.com/charts' 
+    targetRevision: '1.16.1'
+    helm:
+      releaseName: istiod
+      # valueFiles:
+      # - $values/infra-deployments/external-dns/cf-myorg--com/bitnami-6.36.1-helm-values.yaml     
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: istio-system 
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-app-deployment
+  namespace: admin-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: admin-app
+  template:
+    metadata:
+      labels:
+        app: admin-app
+    spec:
+      containers:
+      - name: admin-app-container
+        image: 1wolfalone1/swd-admin:latest
+        ports:
+        - containerPort: 80
+        envFrom:
+        - secretRef:
+            name: arthub-secrets

@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: 'loki'
+    repoURL: 'https://grafana.github.io/helm-charts'
+    targetRevision: 3.1.0 
+    plugin:
+      # name: argocd-vault-plugin
+      env:
+      - name: HELM_VALUES
+        value: |
+          loki:
+            storageConfig:
+              aws:
+                access_key_id: <path:kv/data/arthub/AWS_ACCESS_KEY#> 
+                secret_access_key: <path:kv/data/arthub/AWS_SECRET_KEY#> 
+      - name: helm_args
+        value: -f https://github.com/1wolfalone1/arthub-cicd-aws-eks-cluster/raw/main/helm-values/loki.yaml   
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: logging
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+
+storageConfig
