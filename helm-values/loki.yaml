@@ -32,6 +32,7 @@ loki:
   # implement something like the "Wave" controller or another controller that
   # is monitoring top level deployment resources.
   annotations: {}
+  auth_enabled: false
   # Configures the readiness probe for all of the Loki pods
   readinessProbe:
     httpGet:
