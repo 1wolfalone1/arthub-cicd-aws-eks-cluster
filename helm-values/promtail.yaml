@@ -36,14 +36,14 @@ daemonset:
     # -- Defines the min allowed resources for the pod
     minAllowed: {}
     # cpu: 200m
-# memory: 100Mi
+    # memory: 100Mi
 
-# updatePolicy:
-# Specifies minimal number of replicas which need to be alive for VPA Updater to attempt pod eviction
-# minReplicas: 1
-# Specifies whether recommended updates are applied when a Pod is started and whether recommended updates
-# are applied during the life of a Pod. Possible values are "Off", "Initial", "Recreate", and "Auto".
-# updateMode: Auto
+    # updatePolicy:
+      # Specifies minimal number of replicas which need to be alive for VPA Updater to attempt pod eviction
+      # minReplicas: 1
+      # Specifies whether recommended updates are applied when a Pod is started and whether recommended updates
+      # are applied during the life of a Pod. Possible values are "Off", "Initial", "Recreate", and "Auto".
+      # updateMode: Auto
 
 deployment:
   # -- Deploys Promtail as a Deployment
@@ -73,19 +73,19 @@ configmap:
   enabled: false
 
 initContainer: []
-# # -- Specifies whether the init container for setting inotify max user instances is to be enabled
-# - name: init
-#   # -- Docker registry, image and tag for the init container image
-#   image: docker.io/busybox:1.33
-#   # -- Docker image pull policy for the init container image
-#   imagePullPolicy: IfNotPresent
-#   # -- The inotify max user instances to configure
-#   command:
-#     - sh
-#     - -c
-#     - sysctl -w fs.inotify.max_user_instances=128
-#   securityContext:
-#     privileged: true
+  # # -- Specifies whether the init container for setting inotify max user instances is to be enabled
+  # - name: init
+  #   # -- Docker registry, image and tag for the init container image
+  #   image: docker.io/busybox:1.33
+  #   # -- Docker image pull policy for the init container image
+  #   imagePullPolicy: IfNotPresent
+  #   # -- The inotify max user instances to configure
+  #   command:
+  #     - sh
+  #     - -c
+  #     - sysctl -w fs.inotify.max_user_instances=128
+  #   securityContext:
+  #     privileged: true
 
 image:
   # -- The Docker registry
@@ -163,7 +163,7 @@ containerSecurityContext:
   readOnlyRootFilesystem: true
   capabilities:
     drop:
-    - ALL
+      - ALL
   allowPrivilegeEscalation: false
 
 rbac:
@@ -195,38 +195,38 @@ affinity: {}
 
 # -- Tolerations for pods. By default, pods will be scheduled on master/control-plane nodes.
 tolerations:
-- key: node-role.kubernetes.io/master
-  operator: Exists
-  effect: NoSchedule
-- key: node-role.kubernetes.io/control-plane
-  operator: Exists
-  effect: NoSchedule
+  - key: node-role.kubernetes.io/master
+    operator: Exists
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
 
 # -- Default volumes that are mounted into pods. In most cases, these should not be changed.
 # Use `extraVolumes`/`extraVolumeMounts` for additional custom volumes.
 # @default -- See `values.yaml`
 defaultVolumes:
-- name: run
-  hostPath:
-    path: /run/promtail
-- name: containers
-  hostPath:
-    path: /var/lib/docker/containers
-- name: pods
-  hostPath:
-    path: /var/log/pods
+  - name: run
+    hostPath:
+      path: /run/promtail
+  - name: containers
+    hostPath:
+      path: /var/lib/docker/containers
+  - name: pods
+    hostPath:
+      path: /var/log/pods
 
 # -- Default volume mounts. Corresponds to `volumes`.
 # @default -- See `values.yaml`
 defaultVolumeMounts:
-- name: run
-  mountPath: /run/promtail
-- name: containers
-  mountPath: /var/lib/docker/containers
-  readOnly: true
-- name: pods
-  mountPath: /var/log/pods
-  readOnly: true
+  - name: run
+    mountPath: /run/promtail
+  - name: containers
+    mountPath: /var/lib/docker/containers
+    readOnly: true
+  - name: pods
+    mountPath: /var/log/pods
+    readOnly: true
 
 # Extra volumes to be added in addition to those specified under `defaultVolumes`.
 extraVolumes: []
@@ -291,29 +291,29 @@ serviceMonitor:
     # namespace:
     rules: []
     #  - alert: PromtailRequestErrors
-#    expr: 100 * sum(rate(promtail_request_duration_seconds_count{status_code=~"5..|failed"}[1m])) by (namespace, job, route, instance) / sum(rate(promtail_request_duration_seconds_count[1m])) by (namespace, job, route, instance) > 10
-#    for: 5m
-#    labels:
-#      severity: critical
-#    annotations:
-#      description: |
-#        The {{ $labels.job }} {{ $labels.route }} is experiencing
-#        {{ printf \"%.2f\" $value }} errors.
-#        VALUE = {{ $value }}
-#        LABELS = {{ $labels }}
-#      summary: Promtail request errors (instance {{ $labels.instance }})
-#  - alert: PromtailRequestLatency
-#    expr: histogram_quantile(0.99, sum(rate(promtail_request_duration_seconds_bucket[5m])) by (le)) > 1
-#    for: 5m
-#    labels:
-#      severity: critical
-#    annotations:
-#      summary: Promtail request latency (instance {{ $labels.instance }})
-#      description: |
-#        The {{ $labels.job }} {{ $labels.route }} is experiencing
-#        {{ printf \"%.2f\" $value }}s 99th percentile latency.
-#        VALUE = {{ $value }}
-#        LABELS = {{ $labels }}
+    #    expr: 100 * sum(rate(promtail_request_duration_seconds_count{status_code=~"5..|failed"}[1m])) by (namespace, job, route, instance) / sum(rate(promtail_request_duration_seconds_count[1m])) by (namespace, job, route, instance) > 10
+    #    for: 5m
+    #    labels:
+    #      severity: critical
+    #    annotations:
+    #      description: |
+    #        The {{ $labels.job }} {{ $labels.route }} is experiencing
+    #        {{ printf \"%.2f\" $value }} errors.
+    #        VALUE = {{ $value }}
+    #        LABELS = {{ $labels }}
+    #      summary: Promtail request errors (instance {{ $labels.instance }})
+    #  - alert: PromtailRequestLatency
+    #    expr: histogram_quantile(0.99, sum(rate(promtail_request_duration_seconds_bucket[5m])) by (le)) > 1
+    #    for: 5m
+    #    labels:
+    #      severity: critical
+    #    annotations:
+    #      summary: Promtail request latency (instance {{ $labels.instance }})
+    #      description: |
+    #        The {{ $labels.job }} {{ $labels.route }} is experiencing
+    #        {{ printf \"%.2f\" $value }}s 99th percentile latency.
+    #        VALUE = {{ $value }}
+    #        LABELS = {{ $labels }}
 
 # Extra containers created as part of a Promtail Deployment resource
 # - spec for Container:
@@ -322,9 +322,9 @@ serviceMonitor:
 # Note that the key is used as the `name` field, i.e. below will create a
 # container named `promtail-proxy`.
 extraContainers: {}
-# promtail-proxy:
-#   image: nginx
-#   ...
+  # promtail-proxy:
+  #   image: nginx
+  #   ...
 
 # -- Configure additional ports and services. For each configured port, a corresponding service is created.
 # See values.yaml for details
@@ -368,9 +368,9 @@ podSecurityPolicy:
   privileged: true
   allowPrivilegeEscalation: true
   volumes:
-  - 'secret'
-  - 'hostPath'
-  - 'downwardAPI'
+    - 'secret'
+    - 'hostPath'
+    - 'downwardAPI'
   hostNetwork: false
   hostIPC: false
   hostPID: false
@@ -384,7 +384,7 @@ podSecurityPolicy:
     rule: 'RunAsAny'
   readOnlyRootFilesystem: true
   requiredDropCapabilities:
-  - ALL
+    - ALL
 
 # -- Section for crafting Promtails config file. The only directly relevant value is `config.file`
 # which is a templated string that references the other values and snippets below this key.
@@ -411,7 +411,7 @@ config:
   # Must be reference in `config.file` to configure `clients`
   # @default -- See `values.yaml`
   clients:
-  - url: http://loki-loki-distributed-gateway.logging.svc/loki/api/v1/push/dsfasdfds
+    - url: http://loki-gateway/loki/api/v1/push/asdfasdfasfasdfasd
   # -- Configures where Promtail will save it's positions file, to resume reading after restarts.
   # Must be referenced in `config.file` to configure `positions`
   positions:
@@ -424,47 +424,47 @@ config:
   # @default -- See `values.yaml`
   snippets:
     pipelineStages:
-    - cri: {}
+      - cri: {}
     common:
-    - action: replace
-      source_labels:
-      - __meta_kubernetes_pod_node_name
-      target_label: node_name
-    - action: replace
-      source_labels:
-      - __meta_kubernetes_namespace
-      target_label: namespace
-    - action: replace
-      replacement: $1
-      separator: /
-      source_labels:
-      - namespace
-      - app
-      target_label: job
-    - action: replace
-      source_labels:
-      - __meta_kubernetes_pod_name
-      target_label: pod
-    - action: replace
-      source_labels:
-      - __meta_kubernetes_pod_container_name
-      target_label: container
-    - action: replace
-      replacement: /var/log/pods/*$1/*.log
-      separator: /
-      source_labels:
-      - __meta_kubernetes_pod_uid
-      - __meta_kubernetes_pod_container_name
-      target_label: __path__
-    - action: replace
-      replacement: /var/log/pods/*$1/*.log
-      regex: true/(.*)
-      separator: /
-      source_labels:
-      - __meta_kubernetes_pod_annotationpresent_kubernetes_io_config_hash
-      - __meta_kubernetes_pod_annotation_kubernetes_io_config_hash
-      - __meta_kubernetes_pod_container_name
-      target_label: __path__
+      - action: replace
+        source_labels:
+          - __meta_kubernetes_pod_node_name
+        target_label: node_name
+      - action: replace
+        source_labels:
+          - __meta_kubernetes_namespace
+        target_label: namespace
+      - action: replace
+        replacement: $1
+        separator: /
+        source_labels:
+          - namespace
+          - app
+        target_label: job
+      - action: replace
+        source_labels:
+          - __meta_kubernetes_pod_name
+        target_label: pod
+      - action: replace
+        source_labels:
+          - __meta_kubernetes_pod_container_name
+        target_label: container
+      - action: replace
+        replacement: /var/log/pods/*$1/*.log
+        separator: /
+        source_labels:
+          - __meta_kubernetes_pod_uid
+          - __meta_kubernetes_pod_container_name
+        target_label: __path__
+      - action: replace
+        replacement: /var/log/pods/*$1/*.log
+        regex: true/(.*)
+        separator: /
+        source_labels:
+          - __meta_kubernetes_pod_annotationpresent_kubernetes_io_config_hash
+          - __meta_kubernetes_pod_annotation_kubernetes_io_config_hash
+          - __meta_kubernetes_pod_container_name
+        target_label: __path__
 
     # If set to true, adds an additional label for the scrape job.
     # This helps debug the Promtail config.
@@ -602,7 +602,7 @@ sidecar:
       readOnlyRootFilesystem: true
       capabilities:
         drop:
-        - ALL
+          - ALL
       allowPrivilegeEscalation: false
     # -- Readiness probe for sidecar config-reloader
     readinessProbe: {}
@@ -624,12 +624,12 @@ sidecar:
 
 # -- Extra K8s manifests to deploy
 extraObjects: []
-# - apiVersion: "kubernetes-client.io/v1"
-#   kind: ExternalSecret
-#   metadata:
-#     name: promtail-secrets
-#   spec:
-#     backendType: gcpSecretsManager
-#     data:
-#       - key: promtail-oauth2-creds
-#         name: client_secret
+  # - apiVersion: "kubernetes-client.io/v1"
+  #   kind: ExternalSecret
+  #   metadata:
+  #     name: promtail-secrets
+  #   spec:
+  #     backendType: gcpSecretsManager
+  #     data:
+  #       - key: promtail-oauth2-creds
+  #         name: client_secret

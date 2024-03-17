@@ -12,7 +12,7 @@ spec:
     plugin:
       # name: argocd-vault-plugini
       env:
-      - name: helm_args
+      - name: HELM_ARGS
         value: -f https://github.com/1wolfalone1/arthub-cicd-aws-eks-cluster/raw/main/helm-values/promtail.yaml   
   destination:
     server: "https://kubernetes.default.svc"
