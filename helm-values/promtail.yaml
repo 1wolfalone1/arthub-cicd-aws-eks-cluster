@@ -468,7 +468,7 @@ config:
 
     # If set to true, adds an additional label for the scrape job.
     # This helps debug the Promtail config.
-    addScrapeJobLabel: false
+    addScrapeJobLabel:  true
 
     # -- You can put here any keys that will be directly added to the config file's 'limits_config' block.
     # @default -- empty
@@ -493,6 +493,14 @@ config:
         kubernetes_sd_configs:
           - role: pod
         relabel_configs:
+          - source_labels:
+              - __meta_kubernetes_pod_label_platform_greennode_ai_resource_id
+            action: replace
+            target_label: label_id
+          - source_labels:
+              - __meta_kubernetes_pod_label_platform_greennode_ai_resource_type
+            action: replace
+            target_label: label_type
           - source_labels:
               - __meta_kubernetes_pod_controller_name
             regex: ([0-9a-z-.]+?)(-[0-9a-f]{8,10})?
