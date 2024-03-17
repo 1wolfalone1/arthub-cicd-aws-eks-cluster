@@ -17,8 +17,11 @@ spec:
           loki:
             storageConfig:
               aws:
+                bucketnames: bird-trading-platform 
+                region: ap-southeast-1
                 access_key_id: <path:kv/data/arthub/AWS_ACCESS_KEY#> 
                 secret_access_key: <path:kv/data/arthub/AWS_SECRET_KEY#> 
+
       - name: helm_args
         value: -f https://github.com/1wolfalone1/arthub-cicd-aws-eks-cluster/raw/main/helm-values/loki.yaml   
   destination:

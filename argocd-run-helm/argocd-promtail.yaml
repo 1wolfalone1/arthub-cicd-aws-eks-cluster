@@ -12,7 +12,7 @@ spec:
     helm:
       releaseName: promtail
       valueFiles:
-      - https://github.com/1wolfalone1/arthub-cicd-aws-eks-cluster/raw/main/helm-values/promtail.yamll    
+      - https://github.com/1wolfalone1/arthub-cicd-aws-eks-cluster/raw/main/helm-values/promtail.yaml 
   destination:
     server: "https://kubernetes.default.svc"
     namespace: logging
