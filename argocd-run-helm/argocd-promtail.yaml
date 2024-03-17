@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: 'promtail'
+    repoURL: 'https://grafana.github.io/helm-charts'
+    targetRevision: 6.15.5 
+    plugin:
+      # name: argocd-vault-plugini
+      env:
+      - name: helm_args
+        value: -f https://github.com/1wolfalone1/arthub-cicd-aws-eks-cluster/raw/main/helm-values/promtail.yaml   
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: logging
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true

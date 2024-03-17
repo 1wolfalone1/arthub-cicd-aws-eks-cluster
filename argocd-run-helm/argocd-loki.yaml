@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    chart: 'loki'
+    chart: 'loki-distributed'
     repoURL: 'https://grafana.github.io/helm-charts'
-    targetRevision: 3.1.0 
+    targetRevision: 0.78.3 
     plugin:
       # name: argocd-vault-plugin
       env:
@@ -32,5 +32,3 @@ spec:
       prune: true
       allowEmpty: true
       selfHeal: true
-
-storageConfig
